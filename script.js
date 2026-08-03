@@ -6,28 +6,26 @@ let currentSongIndex = 0;
 
 async function getSongs(folder) {
     currfolder = folder;
-    let a = await fetch(`${folder}/`);
-    let response = await a.text();
 
-    console.log(response);
+    try {
+       
+        let response = await fetch(`${folder}/song.json`);
 
-    let div = document.createElement("div");
-    div.innerHTML = response;
-
-    let links = div.getElementsByTagName("a");
-    songs = [];
-
-    for (let index = 0; index < links.length; index++) {
-        const element = links[index];
-
-        if (element.href.endsWith(".mp3")) {
-            songs.push(decodeURIComponent(element.href.split(`${currfolder}/`)[1]));
+        if (!response.ok) {
+            throw new Error("song.json not found");
         }
+
+        songs = await response.json();
+
+        console.log("Songs:", songs);
+
+        return songs;
+
+    } catch (error) {
+        console.error("Error loading songs:", error);
+        songs = [];
+        return songs;
     }
-
-    console.log("Songs:", songs);
-
-    return songs;
 }
 
 const playMusic = (track) => {
@@ -59,9 +57,10 @@ const playMusic = (track) => {
 async function main() {
 
     songs = await getSongs("songs/ncl");
-    console.log(songs);
 
     let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0];
+
+    songUL.innerHTML = "";
 
     for (const song of songs) {
         songUL.innerHTML += `<li>
@@ -79,11 +78,9 @@ async function main() {
         </li>`;
     }
 
-    Array.from(document.querySelector(".songList").getElementsByTagName("li")).forEach((e) => {
+    Array.from(document.querySelector(".songList").getElementsByTagName("li")).forEach((e, i) => {
         e.addEventListener("click", () => {
-            let track = e.querySelector(".info").firstElementChild.innerHTML.trim();
-            console.log(track);
-            playMusic(track);
+            playMusic(songs[i]);
         });
     });
 
@@ -119,8 +116,6 @@ currentSong.addEventListener("timeupdate", () => {
         `${formatTime(currentSong.currentTime)} / ${formatTime(currentSong.duration)}`;
 
     let percent = (currentSong.currentTime / currentSong.duration) * 100;
-
-    console.log(percent);
 
     document.querySelector(".circle").style.left =
         (3 + percent * 0.9475) + "%";
@@ -185,10 +180,9 @@ document.getElementById("previous").addEventListener("click", () => {
 Array.from(document.getElementsByClassName("card")).forEach(e => {
     e.addEventListener("click", async (item) => {
 
-
         document.querySelector(".left").style.left = "0";
         document.querySelector(".container2").style.left = "0";
-        
+
         songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
 
         let songUL = document.querySelector(".songList").getElementsByTagName("ul")[0];
@@ -211,18 +205,13 @@ Array.from(document.getElementsByClassName("card")).forEach(e => {
             </li>`;
         }
 
-        Array.from(document.querySelector(".songList").getElementsByTagName("li")).forEach((e) => {
+        Array.from(document.querySelector(".songList").getElementsByTagName("li")).forEach((e, i) => {
             e.addEventListener("click", () => {
-                let track = e.querySelector(".info").firstElementChild.innerHTML.trim();
-                playMusic(track);
+                playMusic(songs[i]);
             });
         });
 
     });
 });
-
-
-
-
 
 main();
