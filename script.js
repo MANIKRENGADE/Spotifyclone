@@ -34,7 +34,7 @@ const playMusic = (track) => {
 
     currentSongIndex = songs.indexOf(track);
 
-    play.src = "pause.WEBP";
+    play.src = "pause.webp";
 
     const songInfo = document.querySelector(".songinfo");
 
