@@ -365,6 +365,9 @@ ul li{
            
         
         }
+         cardcontainer4{
+            max-height:190px;
+        }
      .cardcontainer4{
     display: flex;
     flex-wrap: wrap;
@@ -373,7 +376,7 @@ ul li{
     padding:20px;
     
     margin:0px;
-    max-height:75%;
+    max-height:80%;
     margin-bottom:500px;
 }    
         .secdiv{
