@@ -104,7 +104,7 @@ function formatTime(seconds) {
 play.addEventListener("click", () => {
     if (currentSong.paused) {
         currentSong.play();
-        play.src = "pause.WEBP";
+        play.src = "pause.webp";
     } else {
         currentSong.pause();
         play.src = "download.png";
