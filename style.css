@@ -171,7 +171,7 @@ ul li{
     width:88%;
     background-color:rgb(211, 207, 207);
     position:absolute;
- bottom:0px;
+ bottom:28px;
    border-radius:20px;
    border:0.5px solid black;
    display:flex;
@@ -373,7 +373,7 @@ ul li{
     padding:20px;
     
     margin:0px;
-    max-height:87%;
+    max-height:75%;
     margin-bottom:500px;
 }    
         .secdiv{
